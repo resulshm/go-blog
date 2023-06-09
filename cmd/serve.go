@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/resulshm/go-blog/config"
+	"github.com/resulshm/go-blog/pkg/config"
+	"github.com/resulshm/go-blog/pkg/routing"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -24,30 +24,16 @@ var serveCmd = &cobra.Command{
 }
 
 func serve() {
-	configs := configSet()
+	config.Set()
 
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
+	routing.Init()
+	router := routing.GetRouter()
+	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message":  "pong",
 			"app name": viper.GetString("App.Name"),
 		})
 	})
-	r.Run(fmt.Sprintf("%s:%s", configs.Server.Host, configs.Server.Port))
-}
 
-func configSet() config.Config {
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("config")
-	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("Error in reading config")
-	}
-
-	var configs config.Config
-	err := viper.Unmarshal(&configs)
-	if err != nil {
-		fmt.Printf("unable to decode into struct, %v", err)
-	}
-	return configs
+	routing.Serve()
 }
