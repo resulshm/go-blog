@@ -12,4 +12,13 @@ type Server struct {
 type Config struct {
 	App    App
 	Server Server
+	DB     DB
+}
+
+type DB struct {
+	Username string
+	Password string
+	Host     string
+	Port     string
+	Name     string
 }
