@@ -19,7 +19,7 @@ func New() *ArticleRepository {
 func (articleRepository *ArticleRepository) List(limit int) []articleModels.Article {
 	var articles []articleModels.Article
 
-	articleRepository.DB.Limit(limit).Joins("User").Order("rand()").Find(&articles)
+	articleRepository.DB.Limit(limit).Joins("User").Find(&articles)
 
 	return articles
 }
