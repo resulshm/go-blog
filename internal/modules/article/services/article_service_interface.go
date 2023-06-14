@@ -1,8 +1,10 @@
 package services
 
-import articleModels "github.com/resulshm/go-blog/internal/modules/article/models"
+import (
+	articleResponse "github.com/resulshm/go-blog/internal/modules/article/responses"
+)
 
 type ArticleServiceInterface interface {
-	GetFeaturedArticles() []articleModels.Article
-	GetStoriesArticles() []articleModels.Article
+	GetFeaturedArticles() articleResponse.Articles
+	GetStoriesArticles() articleResponse.Articles
 }
