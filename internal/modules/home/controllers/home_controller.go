@@ -4,13 +4,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	articleService "github.com/resulshm/go-blog/internal/modules/article/services"
 	"github.com/resulshm/go-blog/pkg/html"
 )
 
-type Controller struct{}
+type Controller struct {
+	articleService articleService.ArticleServiceInterface
+}
 
 func New() *Controller {
-	return &Controller{}
+	return &Controller{
+		articleService: articleService.New(),
+	}
 }
 
 func (controller *Controller) Index(c *gin.Context) {
