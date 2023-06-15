@@ -7,4 +7,5 @@ import (
 type ArticleServiceInterface interface {
 	GetFeaturedArticles() articleResponse.Articles
 	GetStoriesArticles() articleResponse.Articles
+	Find(id int) (articleResponse.Article, error)
 }

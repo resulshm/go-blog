@@ -23,3 +23,11 @@ func (articleRepository *ArticleRepository) List(limit int) []articleModels.Arti
 
 	return articles
 }
+
+func (articleRepository *ArticleRepository) Find(id int) articleModels.Article {
+	var article articleModels.Article
+
+	articleRepository.DB.Joins("User").First(&article, id)
+
+	return article
+}
