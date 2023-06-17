@@ -7,7 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/resulshm/go-blog/internal/modules/user/requests/auth"
 	userService "github.com/resulshm/go-blog/internal/modules/user/services"
+	"github.com/resulshm/go-blog/pkg/converters"
+	"github.com/resulshm/go-blog/pkg/errors"
 	"github.com/resulshm/go-blog/pkg/html"
+	"github.com/resulshm/go-blog/pkg/sessions"
 )
 
 type Controller struct {
@@ -30,6 +33,11 @@ func (controller *Controller) HandleRegister(c *gin.Context) {
 	var request auth.RegisterRequest
 
 	if err := c.ShouldBind(&request); err != nil {
+		errors.Init()
+		errors.SetFromErrors(err)
+
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
