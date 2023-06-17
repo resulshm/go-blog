@@ -10,6 +10,7 @@ import (
 	"github.com/resulshm/go-blog/pkg/converters"
 	"github.com/resulshm/go-blog/pkg/errors"
 	"github.com/resulshm/go-blog/pkg/html"
+	"github.com/resulshm/go-blog/pkg/old"
 	"github.com/resulshm/go-blog/pkg/sessions"
 )
 
@@ -35,8 +36,11 @@ func (controller *Controller) HandleRegister(c *gin.Context) {
 	if err := c.ShouldBind(&request); err != nil {
 		errors.Init()
 		errors.SetFromErrors(err)
-
 		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
 
 		c.Redirect(http.StatusFound, "/register")
 		return
