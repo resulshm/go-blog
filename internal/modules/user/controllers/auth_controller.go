@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -46,11 +47,26 @@ func (controller *Controller) HandleRegister(c *gin.Context) {
 		return
 	}
 
+	if controller.userService.CheckUserExists(request.Email) {
+		errors.Init()
+		errors.Add("Email", "Email address already exists")
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/register")
+		return
+	}
+
 	user, err := controller.userService.Create(request)
 	if err != nil {
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
+
+	sessions.Set(c, "auth", fmt.Sprintf("%v", user.ID))
 
 	log.Printf("The user created successfully with name %s", user.Name)
 	c.Redirect(http.StatusFound, "/")

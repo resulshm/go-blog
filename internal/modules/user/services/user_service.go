@@ -20,7 +20,7 @@ func New() *UserService {
 	}
 }
 
-func (articleService *UserService) Create(request auth.RegisterRequest) (userResponse.User, error) {
+func (userService *UserService) Create(request auth.RegisterRequest) (userResponse.User, error) {
 	var response userResponse.User
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), 12)
 	if err != nil {
@@ -32,10 +32,20 @@ func (articleService *UserService) Create(request auth.RegisterRequest) (userRes
 		Password: string(hashedPassword),
 	}
 
-	newUser := articleService.userRepository.Create(user)
+	newUser := userService.userRepository.Create(user)
 	if newUser.ID == 0 {
 		return response, errors.New("error in creating new user")
 	}
 
 	return userResponse.ToUser(newUser), nil
+}
+
+func (userService *UserService) CheckUserExists(email string) bool {
+	user := userService.userRepository.FindByEmail(email)
+
+	if user.ID != 0 {
+		return true
+	}
+
+	return false
 }

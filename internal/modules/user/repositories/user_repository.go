@@ -23,3 +23,11 @@ func (userRepository *UserRepository) Create(user userModels.User) userModels.Us
 
 	return newUser
 }
+
+func (userRepository *UserRepository) FindByEmail(email string) userModels.User {
+	var user userModels.User
+
+	userRepository.DB.First(&user, "email = ?", email)
+
+	return user
+}
