@@ -71,3 +71,13 @@ func (controller *Controller) HandleRegister(c *gin.Context) {
 	log.Printf("The user created successfully with name %s", user.Name)
 	c.Redirect(http.StatusFound, "/")
 }
+
+func (controller *Controller) Login(c *gin.Context) {
+	html.Render(c, http.StatusOK, "modules/user/html/login", gin.H{
+		"title": "Login",
+	})
+}
+
+func (controller *Controller) HandleLogin(c *gin.Context) {
+
+}
