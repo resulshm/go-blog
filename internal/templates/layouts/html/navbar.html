@@ -12,13 +12,15 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <!-- Begin Menu -->
             <ul class="navbar-nav ml-auto">
+                {{ if (eq .AUTH.ID 0) }}
                 <li class="nav-item active">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
+                {{else}}
                 <li class="nav-item dropdown">
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <img class="float-left profile-thumbnail" src="https://ui-avatars.com/api/?name=Ayman%20Elmalah" alt="Ayman Elmalah">
-                        Ayman Elmalah
+                        <img class="float-left profile-thumbnail" src="{{ .AUTH.Image }}" alt="{{ .AUTH.Name }}">
+                        {{ .AUTH.Name }}
                     </a>
                     <ul class="dropdown-menu">
                         <li>
@@ -32,6 +34,7 @@
                         </li>
                     </ul>
                 </li>
+                {{ end }}
             </ul>
             <!-- End Menu -->
             <!-- Begin Search -->
