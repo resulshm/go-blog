@@ -12,4 +12,6 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/login", userController.Login)
 	router.POST("/login", userController.HandleLogin)
+
+	router.POST("/logout", userController.HandleLogout)
 }

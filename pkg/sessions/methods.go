@@ -12,7 +12,7 @@ func Set(c *gin.Context, key string, value string) {
 	session.Save()
 }
 
-func Flash(c *gin.Context, key string) string {
+func Get(c *gin.Context, key string) string {
 	session := sessions.Default(c)
 	response := session.Get(key)
 
@@ -24,7 +24,7 @@ func Flash(c *gin.Context, key string) string {
 	return ""
 }
 
-func Get(c *gin.Context, key string) string {
+func Flash(c *gin.Context, key string) string {
 	session := sessions.Default(c)
 	response := session.Get(key)
 
@@ -37,4 +37,11 @@ func Get(c *gin.Context, key string) string {
 	}
 
 	return ""
+}
+
+func Remove(c *gin.Context, key string) {
+	session := sessions.Default(c)
+
+	session.Delete(key)
+	session.Save()
 }
