@@ -79,5 +79,37 @@ func (controller *Controller) Login(c *gin.Context) {
 }
 
 func (controller *Controller) HandleLogin(c *gin.Context) {
+	var request auth.LoginRequest
 
+	if err := c.ShouldBind(&request); err != nil {
+		errors.Init()
+		errors.SetFromErrors(err)
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/login")
+		return
+	}
+
+	user, err := controller.userService.HandleUserLogin(request)
+	if err != nil {
+		errors.Init()
+		errors.Add("email", err.Error())
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/login")
+		return
+	}
+
+	sessions.Set(c, "auth", fmt.Sprintf("%v", user.ID))
+
+	log.Printf("The user logged in successfully with name %s", user.Name)
+	c.Redirect(http.StatusFound, "/")
 }
