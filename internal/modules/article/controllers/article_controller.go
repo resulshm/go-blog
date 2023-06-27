@@ -1,12 +1,19 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/resulshm/go-blog/internal/modules/article/requests/articles"
 	articleService "github.com/resulshm/go-blog/internal/modules/article/services"
+	"github.com/resulshm/go-blog/internal/modules/user/helpers"
+	"github.com/resulshm/go-blog/pkg/converters"
+	"github.com/resulshm/go-blog/pkg/errors"
 	"github.com/resulshm/go-blog/pkg/html"
+	"github.com/resulshm/go-blog/pkg/old"
+	"github.com/resulshm/go-blog/pkg/sessions"
 )
 
 type Controller struct {
@@ -45,7 +52,33 @@ func (controller *Controller) Show(c *gin.Context) {
 }
 
 func (controller *Controller) Create(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "everythin is ok",
+	html.Render(c, http.StatusOK, "modules/article/html/create", gin.H{
+		"title": "Create article",
 	})
+}
+
+func (controller *Controller) Store(c *gin.Context) {
+	var request articles.StoreRequest
+
+	if err := c.ShouldBind(&request); err != nil {
+		errors.Init()
+		errors.SetFromErrors(err)
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/articles/create")
+		return
+	}
+	user := helpers.Auth(c)
+
+	article, err := controller.articleService.Store(request, user)
+	if err != nil {
+		c.Redirect(http.StatusFound, "/articles/create")
+		return
+	}
+
+	c.Redirect(http.StatusFound, fmt.Sprintf("/articles/%d", article.ID))
 }

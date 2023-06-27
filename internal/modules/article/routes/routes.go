@@ -14,6 +14,7 @@ func Routes(router *gin.Engine) {
 	authGroup.Use(middlewares.IsAuth())
 	{
 		authGroup.GET("/create", articleController.Create)
+		authGroup.POST("/store", articleController.Store)
 	}
 
 }

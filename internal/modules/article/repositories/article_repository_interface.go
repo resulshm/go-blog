@@ -7,4 +7,5 @@ import (
 type ArticleRepositoryInterface interface {
 	List(limit int) []articleModels.Article
 	Find(id int) articleModels.Article
+	Create(article articleModels.Article) articleModels.Article
 }
