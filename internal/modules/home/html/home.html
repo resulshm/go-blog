@@ -24,7 +24,7 @@
 				<div class="col-md-7">
 					<div class="card-block">
 						<h2 class="card-title"><a href="/articles/{{ .ID }}">{{ .Title }}</a></h2>
-						<h4 class="card-text">{{ .Content }}</h4>
+						<h4 class="card-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ .Content }}</h4>
 						<div class="metafooter">
 							<div class="wrapfooter">
 								<span class="meta-footer-thumb">
@@ -63,7 +63,7 @@
 			</a>
 			<div class="card-block">
 				<h2 class="card-title"><a href="/articles/{{ .ID }}">{{ .Title }}</a></h2>
-				<h4 class="card-text">{{ .Content}}</h4>
+				<h4 class="card-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ .Content }}</h4>
 				<div class="metafooter">
 					<div class="wrapfooter">
 						<span class="meta-footer-thumb">
