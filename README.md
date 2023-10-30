@@ -1,6 +1,6 @@
-# Simple blog wwritten in Go
+# Simple blog written in Go
 
-## How to run
+## How to run?
 
 - fix credentials in `./configs/config.yml` file
 - run command:
